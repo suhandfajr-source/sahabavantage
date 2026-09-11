@@ -1,5 +1,26 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Project Overview
+
+Sahaba Vantage Estates — premium real estate website ("The Vantage Journey"), built with Next.js 16 App Router, Tailwind CSS v4, and Framer Motion.
+
+### Admin Console
+
+The `/admin` console (inquiry/CMS management) is protected by HTTP Basic Auth via `src/proxy.ts`. Credentials are configured through environment variables (see `.env.example`):
+
+```
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=change-me-in-production
+```
+
+### Private Visit Inquiries
+
+Form submissions (contact page + private visit modal) POST to `/api/inquiries`, which stores leads server-side in `.data/inquiries.json`. The admin console reads/updates the same store. On failure, the client falls back to localStorage so the UI never breaks.
+
+### SEO
+
+All development & journal pages are statically generated (SSG) with per-page metadata via `generateStaticParams` + `generateMetadata`. `sitemap.xml` and `robots.txt` are generated at build time.
+
 ## Getting Started
 
 First, run the development server:

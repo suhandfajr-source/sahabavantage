@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown, Sparkles } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function CinematicHero() {
-  const [introFinished, setIntroFinished] = useState(false);
   const { scrollY } = useScroll();
 
   // Scroll animations for split typography
@@ -15,13 +15,6 @@ export default function CinematicHero() {
   const heroScale = useTransform(scrollY, [0, 600], [1, 1.12]);
   const opacity = useTransform(scrollY, [0, 450], [1, 0.2]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIntroFinished(true);
-    }, 1200);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <section id="hero" className="relative h-screen w-full overflow-hidden bg-[#071326] flex items-center justify-center">
       {/* Background Architectural Imagery with Parallax Scale */}
@@ -29,10 +22,13 @@ export default function CinematicHero() {
         style={{ scale: heroScale }}
         className="absolute inset-0 z-0 origin-center"
       >
-        <img
+        <Image
           src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2400&q=85"
           alt="Sahaba Vantage Architectural Estate"
-          className="w-full h-full object-cover object-center filter brightness-[0.62] contrast-[1.08]"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center brightness-[0.62] contrast-[1.08]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#071326] via-transparent to-[#071326]/70" />
         <div className="absolute inset-0 bg-radial-gradient from-transparent via-[#071326]/40 to-[#071326]/80" />

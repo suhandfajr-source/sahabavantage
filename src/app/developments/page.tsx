@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { developments } from '@/data/developments';
 import { motion } from 'framer-motion';
-import { MapPin, ArrowUpRight, Check, Compass, Layers } from 'lucide-react';
+import { MapPin, ArrowUpRight, Compass } from 'lucide-react';
+import Image from 'next/image';
 
 export default function DevelopmentsPage() {
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'residential' | 'upcoming'>('all');
@@ -82,10 +83,13 @@ export default function DevelopmentsPage() {
           >
             {/* Project Image */}
             <div className="lg:col-span-7 relative h-[380px] sm:h-[460px] lg:h-auto overflow-hidden">
-              <img
+              <Image
                 src={dev.heroImage}
                 alt={dev.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 58vw"
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0B1D3A]/70 via-transparent to-transparent" />
 

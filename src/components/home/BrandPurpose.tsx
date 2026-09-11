@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import VantageLine from '../ui/VantageLine';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function BrandPurpose() {
@@ -54,9 +54,12 @@ export default function BrandPurpose() {
           {/* Right Architectural Image Composition */}
           <div className="lg:col-span-5 relative">
             <div className="relative rounded-3xl overflow-hidden border border-[#C7A66A]/30 shadow-2xl group" data-cursor="VIEW">
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80"
                 alt="Architectural Harmony at Sahaba Vantage"
+                width={1200}
+                height={800}
+                sizes="(max-width: 1024px) 100vw, 40vw"
                 className="w-full h-[420px] sm:h-[480px] object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0B1D3A]/60 via-transparent to-transparent" />

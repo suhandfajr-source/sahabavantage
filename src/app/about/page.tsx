@@ -1,9 +1,8 @@
 'use client';
 
 import React from 'react';
-import { brandDetails, leadershipMembers, brandMilestones } from '@/data/brandContent';
-import { motion } from 'framer-motion';
-import { Award, Compass, ShieldCheck, MapPin } from 'lucide-react';
+import { leadershipMembers, brandMilestones } from '@/data/brandContent';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function AboutPage() {
@@ -28,11 +27,13 @@ export default function AboutPage() {
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 mb-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           <div className="lg:col-span-6 relative">
-            <div className="rounded-3xl overflow-hidden border border-[#C7A66A]/30 shadow-2xl h-[420px] sm:h-[480px]">
-              <img
+            <div className="relative rounded-3xl overflow-hidden border border-[#C7A66A]/30 shadow-2xl h-[420px] sm:h-[480px]">
+              <Image
                 src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80"
                 alt="Sahaba Vantage Heritage"
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
               />
             </div>
           </div>
@@ -94,11 +95,13 @@ export default function AboutPage() {
               key={idx}
               className="rounded-3xl overflow-hidden border border-[#C7A66A]/30 bg-white shadow-lg flex flex-col justify-between"
             >
-              <div className="h-72 overflow-hidden">
-                <img
+              <div className="relative h-72 overflow-hidden">
+                <Image
                   src={leader.image}
                   alt={leader.name}
-                  className="w-full h-full object-cover object-top"
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                  className="object-cover object-top"
                 />
               </div>
               <div className="p-6 space-y-3">

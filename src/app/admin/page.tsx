@@ -1,25 +1,21 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { getInquiries, updateInquiryStatus } from '@/lib/storage';
+import { fetchInquiries, patchInquiry } from '@/lib/storage';
 import { developments } from '@/data/developments';
 import { journalArticles } from '@/data/articles';
 import { PrivateVisitInquiry } from '@/types';
 import { formatDate } from '@/lib/utils';
+import Image from 'next/image';
 import {
   Building2,
   CalendarCheck,
   FileText,
-  Clock,
-  CheckCircle,
-  XCircle,
   Search,
   Shield,
   Phone,
   Mail,
-  User,
-  ExternalLink,
-  Plus
+  User
 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -31,12 +27,26 @@ export default function AdminPage() {
   const [advisorNote, setAdvisorNote] = useState('');
 
   useEffect(() => {
-    setInquiries(getInquiries());
+    let cancelled = false;
+
+    const load = async () => {
+      const data = await fetchInquiries();
+      if (!cancelled) {
+        setInquiries(data);
+      }
+    };
+
+    load();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  const handleStatusChange = (id: string, newStatus: PrivateVisitInquiry['status']) => {
-    updateInquiryStatus(id, newStatus, advisorNote || undefined);
-    setInquiries(getInquiries());
+  const handleStatusChange = async (id: string, newStatus: PrivateVisitInquiry['status']) => {
+    await patchInquiry(id, newStatus, advisorNote || undefined);
+    const data = await fetchInquiries();
+    setInquiries(data);
     if (selectedInquiry?.id === id) {
       setSelectedInquiry({
         ...selectedInquiry,
@@ -336,7 +346,7 @@ export default function AdminPage() {
                 >
                   <div className="space-y-3">
                     <div className="h-44 rounded-2xl overflow-hidden relative">
-                      <img src={dev.heroImage} alt={dev.name} className="w-full h-full object-cover" />
+                      <Image src={dev.heroImage} alt={dev.name} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
                       <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#0B1D3A]/80 text-[#C7A66A] text-[10px] font-semibold uppercase">
                         {dev.status}
                       </span>
@@ -390,7 +400,7 @@ export default function AdminPage() {
                 >
                   <div className="space-y-3">
                     <div className="h-40 rounded-2xl overflow-hidden relative">
-                      <img src={art.coverImage} alt={art.title} className="w-full h-full object-cover" />
+                      <Image src={art.coverImage} alt={art.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
                       <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#0B1D3A]/85 text-[#C7A66A] text-[10px] font-semibold uppercase">
                         {art.category}
                       </span>

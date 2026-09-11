@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { brandDetails } from '@/data/brandContent';
 import { developments } from '@/data/developments';
-import { ArrowUpRight, ShieldCheck, Mail } from 'lucide-react';
+import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 
 export default function Footer() {
   return (

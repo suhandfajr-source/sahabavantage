@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Development } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface ProjectGalleryModalProps {
   gallery: Development['gallery'];
@@ -37,10 +38,12 @@ export default function ProjectGalleryModal({ gallery, projectName }: ProjectGal
             className="relative rounded-3xl overflow-hidden border border-[#C7A66A]/30 shadow-lg cursor-pointer h-72 group"
             data-cursor="VIEW"
           >
-            <img
+            <Image
               src={item.url}
               alt={item.caption}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0B1D3A]/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
@@ -85,10 +88,13 @@ export default function ProjectGalleryModal({ gallery, projectName }: ProjectGal
 
               {/* Main Image View */}
               <div className="relative rounded-2xl overflow-hidden border border-[#C7A66A]/40 shadow-2xl max-h-[75vh] w-full flex items-center justify-center bg-black">
-                <img
+                <Image
                   src={gallery[selectedIdx].url}
                   alt={gallery[selectedIdx].caption}
-                  className="max-h-[75vh] w-auto object-contain"
+                  width={1600}
+                  height={1000}
+                  sizes="90vw"
+                  className="h-auto w-auto max-h-[75vh] max-w-full object-contain"
                 />
 
                 {/* Prev / Next Arrows */}

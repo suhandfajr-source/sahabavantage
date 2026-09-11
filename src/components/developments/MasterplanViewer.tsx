@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { MasterplanLot } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Info, CheckCircle, Clock, Ban, X, ArrowUpRight } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface MasterplanViewerProps {
   lots: MasterplanLot[];
@@ -13,7 +13,6 @@ interface MasterplanViewerProps {
 
 export default function MasterplanViewer({
   lots,
-  projectName,
   onSelectLotForVisit
 }: MasterplanViewerProps) {
   const [selectedLot, setSelectedLot] = useState<MasterplanLot | null>(null);

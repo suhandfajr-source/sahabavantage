@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { developments } from '@/data/developments';
-import { ArrowUpRight, MapPin, ChevronLeft, ChevronRight, Layers } from 'lucide-react';
+import { ArrowUpRight, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 export default function FeaturedDevelopments() {
   const [activeIdx, setActiveIdx] = useState(0);
@@ -73,11 +74,14 @@ export default function FeaturedDevelopments() {
               data-cursor="VIEW ↗"
             >
               <Link href={`/developments/${currentDev.slug}`} className="block relative">
-                <div className="h-[380px] sm:h-[480px] lg:h-[540px] overflow-hidden">
-                  <img
+                <div className="relative h-[380px] sm:h-[480px] lg:h-[540px] overflow-hidden">
+                  <Image
                     src={currentDev.heroImage}
                     alt={currentDev.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 66vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                 </div>
 

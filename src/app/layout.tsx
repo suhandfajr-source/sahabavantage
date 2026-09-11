@@ -19,6 +19,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://sahabavantage.com'),
   title: 'Sahaba Vantage Estates | Live Better — Architectural Luxury Real Estate',
   description: 'Sahaba Vantage Estates crafts timeless, architectural sanctuaries and sustainable hillside residences across Bogor, Bandung, and South Jakarta.',
   keywords: [

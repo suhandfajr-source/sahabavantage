@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, CloudSun, Moon, Sparkles, Clock } from 'lucide-react';
+import { Sun, CloudSun, Moon, Clock } from 'lucide-react';
+import Image from 'next/image';
 
 const timeFrames = [
   {
@@ -120,10 +121,12 @@ export default function DayAtVantage() {
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 className="relative rounded-3xl overflow-hidden border border-[#C7A66A]/40 shadow-2xl h-[400px] sm:h-[480px] lg:h-[540px] group"
               >
-                <img
+                <Image
                   src={current.image}
                   alt={current.label}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-1000"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#071326]/75 via-transparent to-transparent" />
 

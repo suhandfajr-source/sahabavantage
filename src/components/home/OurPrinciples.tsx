@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { brandPillars } from '@/data/brandContent';
 import { ArrowUpRight } from 'lucide-react';
+import Image from 'next/image';
 
 export default function OurPrinciples() {
   const [activePillar, setActivePillar] = useState<number>(0);
@@ -47,10 +48,12 @@ export default function OurPrinciples() {
                     transition={{ duration: 0.4 }}
                     className="absolute inset-0 pointer-events-none"
                   >
-                    <img
+                    <Image
                       src={pillar.image}
                       alt={pillar.title}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="100vw"
+                      className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0B1D3A] via-[#0B1D3A]/80 to-transparent" />
                   </motion.div>

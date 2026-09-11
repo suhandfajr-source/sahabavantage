@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import { UnitType } from '@/types';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Layers, Info, Check, Maximize2 } from 'lucide-react';
+import { Layers, Check } from 'lucide-react';
 
 interface FloorplanViewerProps {
   unitType: UnitType;

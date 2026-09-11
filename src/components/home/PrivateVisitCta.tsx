@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles, MessageSquare } from 'lucide-react';
+import Image from 'next/image';
 import PrivateVisitModal from '../ui/PrivateVisitModal';
 import { brandDetails } from '@/data/brandContent';
 
@@ -18,10 +19,13 @@ export default function PrivateVisitCta() {
       <section id="cta" className="relative py-28 sm:py-36 bg-[#071326] text-[#F8F6F1] overflow-hidden">
         {/* Background Architectural Overlay */}
         <div className="absolute inset-0 z-0">
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=80"
             alt="Sahaba Vantage Evening Ambience"
-            className="w-full h-full object-cover filter brightness-[0.3] contrast-[1.1]"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover brightness-[0.3] contrast-[1.1]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#071326] via-[#071326]/60 to-[#071326]" />
         </div>

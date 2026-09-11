@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import { UnitType } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bed, Bath, Car, Maximize, Layers, ArrowRight, Eye } from 'lucide-react';
+import { Bed, Car, Maximize, Layers, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 import FloorplanViewer from './FloorplanViewer';
 
 interface UnitTypeCardProps {
@@ -20,10 +21,12 @@ export default function UnitTypeCard({ unit, onInquire }: UnitTypeCardProps) {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
         {/* Left Visual Image Showcase */}
         <div className="lg:col-span-6 relative h-[360px] sm:h-[420px] lg:h-auto overflow-hidden">
-          <img
+          <Image
             src={activeTab === 'exterior' ? unit.exteriorImage : unit.interiorImage}
             alt={unit.name}
-            className="w-full h-full object-cover"
+            fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0B1D3A] via-transparent to-transparent" />
 

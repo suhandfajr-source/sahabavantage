@@ -2,22 +2,16 @@ import { PrivateVisitInquiry } from '@/types';
 
 const STORAGE_KEY_INQUIRIES = 'sve_inquiries_v1';
 
+/**
+ * Client-side inquiry helpers.
+ *
+ * Primary path: submit/read via the /api/inquiries route handler so leads
+ * reach the sales team through the server-side store.
+ * Fallback path: localStorage — keeps the UI functional offline or when the
+ * API is unavailable (e.g. static hosting without the API layer).
+ */
+
 const initialInquiries: PrivateVisitInquiry[] = [
-  {
-    id: 'inq-101',
-    fullName: 'Bambang Soediro',
-    whatsapp: '+6281234567890',
-    email: 'bambang.soediro@investama.co.id',
-    developmentSlug: 'vantage-residence',
-    developmentName: 'Vantage Residence Bogor',
-    preferredDate: '2026-03-25',
-    preferredTime: '10:00 AM',
-    visitorCount: 3,
-    message: 'Interested in The Celestial Villa Type 380 with prime mountain view orientation. Requesting private tour.',
-    status: 'confirmed',
-    createdAt: '2026-03-10T08:30:00Z',
-    advisorNotes: 'VIP client, assigned Senior Advisor Hendra.'
-  },
   {
     id: 'inq-102',
     fullName: 'Clarissa Haris',
@@ -35,7 +29,7 @@ const initialInquiries: PrivateVisitInquiry[] = [
 ];
 
 export function getInquiries(): PrivateVisitInquiry[] {
-  if (typeof window === 'undefined') return initialInquiries;
+  if (typeof window === 'undefined') return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY_INQUIRIES);
     if (!raw) {
@@ -48,7 +42,7 @@ export function getInquiries(): PrivateVisitInquiry[] {
   }
 }
 
-export function saveInquiry(inquiry: Omit<PrivateVisitInquiry, 'id' | 'createdAt' | 'status'>): PrivateVisitInquiry {
+function saveInquiryLocal(inquiry: Omit<PrivateVisitInquiry, 'id' | 'createdAt' | 'status'>): PrivateVisitInquiry {
   const newInquiry: PrivateVisitInquiry = {
     ...inquiry,
     id: `inq-${Date.now()}`,
@@ -87,4 +81,75 @@ export function updateInquiryStatus(id: string, status: PrivateVisitInquiry['sta
   } catch (err) {
     console.error('Failed to update inquiry status', err);
   }
+}
+
+/** Submit an inquiry through the API, falling back to localStorage. */
+export async function submitInquiry(
+  inquiry: Omit<PrivateVisitInquiry, 'id' | 'createdAt' | 'status'>
+): Promise<{ inquiry: PrivateVisitInquiry; source: 'api' | 'local' }> {
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(inquiry)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.inquiry) {
+          return { inquiry: data.inquiry as PrivateVisitInquiry, source: 'api' };
+        }
+      } else {
+        console.error('Inquiry API rejected submission', res.status);
+      }
+    } catch (err) {
+      console.error('Inquiry API unavailable, falling back to local storage', err);
+    }
+  }
+  return { inquiry: saveInquiryLocal(inquiry), source: 'local' };
+}
+
+/** Load inquiries from the API (merged with any local-only entries), or localStorage on failure. */
+export async function fetchInquiries(): Promise<PrivateVisitInquiry[]> {
+  const local = getInquiries();
+  if (typeof window === 'undefined') return local;
+
+  try {
+    const res = await fetch('/api/inquiries', { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data?.inquiries)) {
+        const remote = data.inquiries as PrivateVisitInquiry[];
+        const remoteIds = new Set(remote.map((item) => item.id));
+        const localOnly = local.filter((item) => !remoteIds.has(item.id));
+        return [...localOnly, ...remote];
+      }
+    }
+  } catch (err) {
+    console.error('Inquiry API unavailable, using local storage', err);
+  }
+  return local;
+}
+
+/** Update inquiry status through the API; falls back to localStorage. */
+export async function patchInquiry(
+  id: string,
+  status: PrivateVisitInquiry['status'],
+  advisorNotes?: string
+): Promise<boolean> {
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/inquiries', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status, advisorNotes })
+      });
+      if (res.ok) return true;
+      console.error('Inquiry API rejected status update', res.status);
+    } catch (err) {
+      console.error('Inquiry API unavailable, updating locally', err);
+    }
+  }
+  updateInquiryStatus(id, status, advisorNotes);
+  return false;
 }

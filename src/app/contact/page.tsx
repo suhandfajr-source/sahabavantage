@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { brandDetails } from '@/data/brandContent';
 import { developments } from '@/data/developments';
-import { saveInquiry } from '@/lib/storage';
-import { MapPin, Phone, Mail, Clock, Calendar, MessageSquare, CheckCircle2, Sparkles, ShieldCheck } from 'lucide-react';
+import { submitInquiry } from '@/lib/storage';
+import { MapPin, Phone, Mail, Clock, MessageSquare, CheckCircle2, Sparkles, ShieldCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function ContactPage() {
@@ -19,15 +19,15 @@ export default function ContactPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     const dev = developments.find((d) => d.slug === developmentSlug);
     const devName = dev ? dev.name : 'General Consultation';
 
-    setTimeout(() => {
-      saveInquiry({
+    try {
+      await submitInquiry({
         fullName,
         whatsapp,
         email,
@@ -38,7 +38,9 @@ export default function ContactPage() {
         visitorCount,
         message
       });
-
+    } catch (err) {
+      console.error('Failed to submit inquiry', err);
+    } finally {
       setIsSubmitting(false);
       setIsSubmitted(true);
 
@@ -52,7 +54,7 @@ export default function ContactPage() {
       } catch {
         // Fallback
       }
-    }, 600);
+    }
   };
 
   const waUrl = `https://wa.me/${brandDetails.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(

@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Calendar, Clock, User, Phone, Mail, CheckCircle2, Building, Sparkles } from 'lucide-react';
+import { X, Calendar, Clock, User, Phone, Mail, CheckCircle2, Sparkles } from 'lucide-react';
 import { developments } from '@/data/developments';
-import { saveInquiry } from '@/lib/storage';
+import { submitInquiry } from '@/lib/storage';
 import confetti from 'canvas-confetti';
 
 interface PrivateVisitModalProps {
@@ -29,15 +29,15 @@ export default function PrivateVisitModal({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     const dev = developments.find((d) => d.slug === developmentSlug);
     const devName = dev ? dev.name : 'General Inquiry';
 
-    setTimeout(() => {
-      saveInquiry({
+    try {
+      await submitInquiry({
         fullName,
         whatsapp,
         email,
@@ -48,7 +48,9 @@ export default function PrivateVisitModal({
         visitorCount,
         message
       });
-
+    } catch (err) {
+      console.error('Failed to submit inquiry', err);
+    } finally {
       setIsSubmitting(false);
       setIsSubmitted(true);
 
@@ -63,7 +65,7 @@ export default function PrivateVisitModal({
       } catch {
         // Fallback silently if canvas is not available
       }
-    }, 600);
+    }
   };
 
   const handleReset = () => {

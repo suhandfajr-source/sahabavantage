@@ -7,7 +7,10 @@ export default function CustomCursor() {
   const [cursorText, setCursorText] = useState<string>('');
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const [isTouch, setIsTouch] = useState<boolean>(true);
+  const [isTouch] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true;
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  });
 
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
@@ -17,12 +20,7 @@ export default function CustomCursor() {
   const smoothY = useSpring(mouseY, springConfig);
 
   useEffect(() => {
-    // Detect touch devices
-    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-      setIsTouch(true);
-      return;
-    }
-    setIsTouch(false);
+    if (isTouch) return;
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
@@ -53,7 +51,7 @@ export default function CustomCursor() {
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [mouseX, mouseY, isVisible]);
+  }, [isTouch, mouseX, mouseY, isVisible]);
 
   if (isTouch || !isVisible) return null;
 

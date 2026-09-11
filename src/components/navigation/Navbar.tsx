@@ -26,8 +26,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isLightPage = pathname === '/developments' || pathname.startsWith('/journal');
-
   return (
     <>
       <header

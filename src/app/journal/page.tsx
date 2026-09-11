@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { journalArticles } from '@/data/articles';
 import { formatDate } from '@/lib/utils';
-import { Search, BookOpen, Clock, ArrowRight, User } from 'lucide-react';
+import { Search, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 export default function JournalPage() {
@@ -76,10 +77,13 @@ export default function JournalPage() {
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 mb-20">
           <div className="rounded-[32px] overflow-hidden border border-[#C7A66A]/30 bg-white shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-0 group">
             <div className="lg:col-span-7 relative h-[360px] sm:h-[440px] overflow-hidden">
-              <img
+              <Image
                 src={featured.coverImage}
                 alt={featured.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 58vw"
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute top-6 left-6">
                 <span className="px-3.5 py-1.5 rounded-full bg-[#0B1D3A]/85 text-[#C7A66A] text-[10px] uppercase tracking-widest font-semibold backdrop-blur-md">
@@ -109,9 +113,11 @@ export default function JournalPage() {
 
               <div className="flex items-center justify-between pt-4 border-t border-[#0B1D3A]/10">
                 <div className="flex items-center space-x-2">
-                  <img
+                  <Image
                     src={featured.author.avatar}
                     alt={featured.author.name}
+                    width={28}
+                    height={28}
                     className="w-7 h-7 rounded-full object-cover"
                   />
                   <span className="text-xs font-semibold text-[#0B1D3A]">{featured.author.name}</span>
@@ -143,10 +149,12 @@ export default function JournalPage() {
             >
               <div>
                 <div className="h-56 overflow-hidden relative">
-                  <img
+                  <Image
                     src={art.coverImage}
                     alt={art.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute top-4 left-4">
                     <span className="px-3 py-1 rounded-full bg-[#0B1D3A]/85 text-[#C7A66A] text-[10px] uppercase tracking-widest font-semibold backdrop-blur-md">

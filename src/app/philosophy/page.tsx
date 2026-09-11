@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { brandPillars } from '@/data/brandContent';
-import { motion } from 'framer-motion';
-import { Sparkles, Trees, Compass, ShieldCheck } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function PhilosophyPage() {
@@ -29,10 +29,13 @@ export default function PhilosophyPage() {
       {/* Featured Editorial Photo */}
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 mb-24">
         <div className="rounded-[36px] overflow-hidden border border-[#C7A66A]/40 shadow-2xl h-[420px] sm:h-[520px] relative">
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=85"
             alt="Sahaba Vantage Philosophy Estate"
-            className="w-full h-full object-cover"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0B1D3A]/70 via-transparent to-transparent" />
           <div className="absolute bottom-8 left-8 right-8 text-white flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
