@@ -1,21 +1,22 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getDevelopmentBySlug, getAllDevelopments } from '@/data/developments';
+import { getDevelopmentBySlugMerged as getDevelopmentBySlug, getMergedDevelopments as getAllDevelopments } from '@/lib/content';
 import DevelopmentDetailClient from '@/components/developments/DevelopmentDetailClient';
 
 interface DevelopmentPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return getAllDevelopments().map((dev) => ({
+export async function generateStaticParams() {
+  const all = await getAllDevelopments();
+  return all.map((dev) => ({
     slug: dev.slug,
   }));
 }
 
 export async function generateMetadata({ params }: DevelopmentPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const development = getDevelopmentBySlug(slug);
+  const development = await getDevelopmentBySlug(slug);
 
   if (!development) {
     return {
@@ -43,7 +44,7 @@ export async function generateMetadata({ params }: DevelopmentPageProps): Promis
 
 export default async function DevelopmentDetailPage({ params }: DevelopmentPageProps) {
   const { slug } = await params;
-  const development = getDevelopmentBySlug(slug);
+  const development = await getDevelopmentBySlug(slug);
 
   if (!development) {
     notFound();

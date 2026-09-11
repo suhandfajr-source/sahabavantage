@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { fetchInquiries, patchInquiry } from '@/lib/storage';
-import { developments } from '@/data/developments';
-import { journalArticles } from '@/data/articles';
+import { useSiteData } from '@/components/DataProvider';
+import CsvImportPanel from '@/components/admin/CsvImportPanel';
 import { PrivateVisitInquiry } from '@/types';
 import { formatDate } from '@/lib/utils';
 import Image from 'next/image';
@@ -15,11 +15,13 @@ import {
   Shield,
   Phone,
   Mail,
-  User
+  User,
+  Upload
 } from 'lucide-react';
 
 export default function AdminPage() {
-  const [activeTab, setActiveTab] = useState<'inquiries' | 'developments' | 'journal'>('inquiries');
+  const { developments, articles: journalArticles } = useSiteData();
+  const [activeTab, setActiveTab] = useState<'inquiries' | 'developments' | 'journal' | 'import'>('inquiries');
   const [inquiries, setInquiries] = useState<PrivateVisitInquiry[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -134,9 +136,18 @@ export default function AdminPage() {
             <FileText size={14} className={activeTab === 'journal' ? 'text-[#C7A66A]' : ''} />
             <span>Journal Articles ({journalArticles.length})</span>
           </button>
+          <button
+            onClick={() => setActiveTab('import')}
+            className={`flex items-center space-x-2 px-5 py-2.5 rounded-full text-xs uppercase tracking-wider font-semibold transition-all ${
+              activeTab === 'import'
+                ? 'bg-[#0B1D3A] text-[#F8F6F1] shadow-md'
+                : 'text-[#6B6B6B] hover:text-[#0B1D3A]'
+            }`}
+          >
+            <Upload size={14} className={activeTab === 'import' ? 'text-[#C7A66A]' : ''} />
+            <span>CSV Import</span>
+          </button>
         </div>
-
-        {/* TAB 1: INQUIRIES MANAGEMENT */}
         {activeTab === 'inquiries' && (
           <div className="space-y-6">
             {/* Filter Bar */}
@@ -425,6 +436,9 @@ export default function AdminPage() {
             </div>
           </div>
         )}
+
+        {/* TAB 4: CSV IMPORT */}
+        {activeTab === 'import' && <CsvImportPanel />}
       </div>
     </div>
   );

@@ -3,10 +3,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { brandDetails } from '@/data/brandContent';
-import { developments } from '@/data/developments';
+import { useSiteData } from '@/components/DataProvider';
 import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 
 export default function Footer() {
+  const { developments } = useSiteData();
   return (
     <footer className="relative bg-[#071326] text-[#F8F6F1] pt-20 pb-12 border-t border-[#C7A66A]/20 overflow-hidden">
       {/* Background Watermark */}

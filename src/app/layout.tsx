@@ -5,6 +5,8 @@ import Navbar from '@/components/navigation/Navbar';
 import Footer from '@/components/ui/Footer';
 import CustomCursor from '@/components/ui/CustomCursor';
 import WhatsAppAdvisor from '@/components/ui/WhatsAppAdvisor';
+import { DataProvider } from '@/components/DataProvider';
+import { getMergedDevelopments, getMergedArticles } from '@/lib/content';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -42,30 +44,37 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [developments, articles] = await Promise.all([
+    getMergedDevelopments(),
+    getMergedArticles()
+  ]);
+
   return (
     <html lang="id" className={`${playfair.variable} ${montserrat.variable}`}>
       <body className="bg-[#F8F6F1] text-[#0B1D3A] antialiased selection:bg-[#0B1D3A] selection:text-[#C7A66A]">
-        {/* Custom Architectural Follower Cursor */}
-        <CustomCursor />
+        <DataProvider developments={developments} articles={articles}>
+          {/* Custom Architectural Follower Cursor */}
+          <CustomCursor />
 
-        {/* Global Navigation Bar */}
-        <Navbar />
+          {/* Global Navigation Bar */}
+          <Navbar />
 
-        {/* Main Application Container */}
-        <main className="min-h-screen">
-          {children}
-        </main>
+          {/* Main Application Container */}
+          <main className="min-h-screen">
+            {children}
+          </main>
 
-        {/* Floating Concierge / WhatsApp Advisor */}
-        <WhatsAppAdvisor />
+          {/* Floating Concierge / WhatsApp Advisor */}
+          <WhatsAppAdvisor />
 
-        {/* Global Editorial Footer */}
-        <Footer />
+          {/* Global Editorial Footer */}
+          <Footer />
+        </DataProvider>
       </body>
     </html>
   );

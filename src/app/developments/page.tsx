@@ -2,12 +2,13 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { developments } from '@/data/developments';
+import { useSiteData } from '@/components/DataProvider';
 import { motion } from 'framer-motion';
 import { MapPin, ArrowUpRight, Compass } from 'lucide-react';
 import Image from 'next/image';
 
 export default function DevelopmentsPage() {
+  const { developments } = useSiteData();
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'residential' | 'upcoming'>('all');
 
   const filtered = developments.filter((dev) => {

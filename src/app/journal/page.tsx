@@ -2,13 +2,14 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { journalArticles } from '@/data/articles';
+import { useSiteData } from '@/components/DataProvider';
 import { formatDate } from '@/lib/utils';
 import { Search, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 export default function JournalPage() {
+  const { articles: journalArticles } = useSiteData();
   const [selectedCat, setSelectedCat] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
 

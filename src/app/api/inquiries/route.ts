@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrivateVisitInquiry } from '@/types';
 import { listInquiries, addInquiry, patchInquiryStatus } from '@/lib/inquiriesStore';
-import { developments } from '@/data/developments';
+import { getDevelopmentBySlugMerged } from '@/lib/content';
 
 /**
  * GET /api/inquiries — list all inquiries. Admin-only (guarded by proxy Basic auth).
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Validation failed', details: errors }, { status: 422 });
     }
 
-    const development = developments.find((d) => d.slug === developmentSlug);
+    const development = await getDevelopmentBySlugMerged(developmentSlug);
     const developmentName = development ? development.name : 'General Consultation';
 
     const inquiry = await addInquiry({

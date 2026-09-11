@@ -3,11 +3,12 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { developments } from '@/data/developments';
+import { useSiteData } from '@/components/DataProvider';
 import { ArrowUpRight, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 
 export default function FeaturedDevelopments() {
+  const { developments } = useSiteData();
   const [activeIdx, setActiveIdx] = useState(0);
 
   const nextProject = () => {

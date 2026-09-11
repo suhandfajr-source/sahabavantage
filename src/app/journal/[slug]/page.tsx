@@ -1,21 +1,22 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getArticleBySlug, getAllArticles } from '@/data/articles';
+import { getArticleBySlugMerged as getArticleBySlug, getMergedArticles as getAllArticles } from '@/lib/content';
 import ArticleDetailClient from '@/components/journal/ArticleDetailClient';
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return getAllArticles().map((article) => ({
+export async function generateStaticParams() {
+  const all = await getAllArticles();
+  return all.map((article) => ({
     slug: article.slug,
   }));
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticleBySlug(slug);
+  const article = await getArticleBySlug(slug);
 
   if (!article) {
     return {
@@ -45,13 +46,13 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
 export default async function ArticleDetailPage({ params }: ArticlePageProps) {
   const { slug } = await params;
-  const article = getArticleBySlug(slug);
+  const article = await getArticleBySlug(slug);
 
   if (!article) {
     notFound();
   }
 
-  const related = getAllArticles()
+  const related = (await getAllArticles())
     .filter((a) => a.slug !== article.slug)
     .slice(0, 2);
 

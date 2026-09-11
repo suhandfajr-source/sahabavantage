@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Calendar, Clock, User, Phone, Mail, CheckCircle2, Sparkles } from 'lucide-react';
-import { developments } from '@/data/developments';
+import { useSiteData } from '@/components/DataProvider';
 import { submitInquiry } from '@/lib/storage';
 import confetti from 'canvas-confetti';
 
@@ -18,6 +18,7 @@ export default function PrivateVisitModal({
   onClose,
   preselectedDevelopment
 }: PrivateVisitModalProps) {
+  const { developments } = useSiteData();
   const [fullName, setFullName] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');

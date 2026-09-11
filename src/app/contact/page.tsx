@@ -2,12 +2,13 @@
 
 import React, { useState } from 'react';
 import { brandDetails } from '@/data/brandContent';
-import { developments } from '@/data/developments';
+import { useSiteData } from '@/components/DataProvider';
 import { submitInquiry } from '@/lib/storage';
 import { MapPin, Phone, Mail, Clock, MessageSquare, CheckCircle2, Sparkles, ShieldCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function ContactPage() {
+  const { developments } = useSiteData();
   const [fullName, setFullName] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
